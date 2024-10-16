@@ -3,18 +3,18 @@ globals [
   total-ignorantes
   total-informados
   total-confusos
-  total-conocidos  ;; Contador de conocidos
-  total-mejores-amigos ;; Contador de mejores amigos
-  total-amigos ;; Contador de amigos
-  recent-informed-mejores   ;; Lista para almacenar los últimos valores de mejores amigos
-  recent-informed-amigos     ;; Lista para almacenar los últimos valores de amigos
-  recent-informed-conocidos   ;; Lista para almacenar los últimos valores de conocidos
+  total-conocidos
+  total-mejores-amigos
+  total-amigos
+  recent-informed-mejores
+  recent-informed-amigos
+  recent-informed-conocidos
 ]
 
 turtles-own [
-  estado           ;; Si es ignorante, informado, confuso, o apagado
+  estado
   tiempo-de-reaccion
-  relaciones       ;; Relaciones entre tortugas: mejor amigo, amigo, conocido
+  relaciones
 ]
 
 ;;;
@@ -30,7 +30,7 @@ to setup
   set total-mejores-amigos 0
   set total-amigos 0
 
-  ;; Inicializar listas para los últimos valores informados
+  ;;listas
   set recent-informed-mejores []
   set recent-informed-amigos []
   set recent-informed-conocidos []
@@ -45,7 +45,7 @@ to setup
     set relaciones []
   ]
 
-  ; Asignar relaciones
+  ;;asignar relaciones
   ask n-of num-mejores-amigos turtles [
     let otro-agent one-of turtles with [self != myself]
     set relaciones lput (list otro-agent "mejor amigo") relaciones
@@ -64,7 +64,7 @@ to setup
     set total-conocidos total-conocidos + 1
   ]
 
-  ; Asignar un agente informado
+  ;;agente informado
   ask one-of turtles [
     set estado "informado"
     set color red
@@ -87,13 +87,13 @@ to go
   tick
 end
 
-;; Procedimiento para mover las tortugas al azar
+;;movimiento
 to move
   rt random 360
   fd 1
 end
 
-;; Lógica para difundir el rumor
+;;difundir el rumor
 to difundir-rumor
   let vecinos turtles in-radius 3
   ask vecinos with [estado = "ignorante"] [
@@ -130,7 +130,7 @@ to difundir-rumor
   ]
 end
 
-;; Verificar si las tortugas "se cansan" de propagar el rumor
+;;apagar personas
 to si-te-cansas
   if (estado = "informado" or estado = "confuso") and random-float 1 < 0.05 [
     set estado "apagado"
@@ -143,10 +143,10 @@ end
 ;;;
 
 to actualizar-grafica
-  ;; Graficar la difusión del rumor por tipo de relación
+
   set-current-plot "Difusión del Rumor por Relación"
 
-  ;; Trazo para Mejores amigos
+
   set-current-plot-pen "Mejores amigos"
   let num-informed-mejores count turtles with [estado = "informado" and member? "mejor amigo" map last relaciones]
   set recent-informed-mejores lput num-informed-mejores recent-informed-mejores
@@ -155,7 +155,7 @@ to actualizar-grafica
   ]
   plot mean recent-informed-mejores
 
-  ;; Trazo para Amigos
+
   set-current-plot-pen "Amigos"
   let num-informed-amigos count turtles with [estado = "informado" and member? "amigo" map last relaciones]
   set recent-informed-amigos lput num-informed-amigos recent-informed-amigos
@@ -164,7 +164,7 @@ to actualizar-grafica
   ]
   plot mean recent-informed-amigos
 
-  ;; Trazo para Conocidos
+
   set-current-plot-pen "Conocidos"
   let num-informed-conocidos count turtles with [estado = "informado" and member? "conocido" map last relaciones]
   set recent-informed-conocidos lput num-informed-conocidos recent-informed-conocidos
@@ -174,7 +174,7 @@ to actualizar-grafica
   plot mean recent-informed-conocidos
 end
 
-;; Para monitorear los estados en la consola
+
 to reportar-estados
   show (word "Ignorantes: " count turtles with [estado = "ignorante"])
   show (word "Informados: " total-informados)
@@ -257,7 +257,7 @@ num-amigos
 num-amigos
 0
 200
-0.0
+15.0
 1
 1
 NIL
@@ -272,7 +272,7 @@ num-mejores-amigos
 num-mejores-amigos
 0
 200
-200.0
+169.0
 1
 1
 NIL
